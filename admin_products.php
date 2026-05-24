@@ -41,10 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
   
-    $stmt_cat   = $pdo->prepare('SELECT name FROM categories WHERE category_id = ?');
-    $stmt_cat->execute([$category_id]);
-    $cat_row    = $stmt_cat->fetch();
-    $device_type = $cat_row ? $cat_row['name'] : '';
 
     if (isset($_POST['save_product'])) {
         if (!empty($_POST['product_id'])) {
@@ -57,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $description,
                 $stock_quantity,
                 $image_url,
-                $device_type,
+                
                 (int)$_POST['product_id']
             ]);
         } else {
@@ -138,7 +134,7 @@ $categories = $pdo->query('SELECT * FROM categories')->fetchAll();
 
 <div class="sidebar">
     <div class="sidebar-logo">
-        <h2>NTPO 🛍️   🛍️      RDE</h2>
+        <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 100px; width: 250px; vertical-align: middle;"></a>
         <p>لوحة تحكم الإدارة</p>
     </div>
     <a href="admin_dashboard.php">🏠 الرئيسية</a>

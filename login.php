@@ -118,6 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+    <header>
+    <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 85px; width: 125px; vertical-align: middle;"></a>
+  
+</header>
 <div class="login-container">
     <div class="logo-area">
         <h1>NTPO          RDE</h1>

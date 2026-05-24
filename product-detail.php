@@ -2,7 +2,13 @@
 require_once 'config.php';
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$stmt = $pdo->prepare('SELECT * FROM products WHERE product_id = ?');
+
+$stmt = $pdo->prepare('
+    SELECT p.*, c.name as category_name 
+    FROM products p 
+    LEFT JOIN categories c ON p.category_id = c.category_id 
+    WHERE p.product_id = ?
+');
 $stmt->execute([$id]);
 $product = $stmt->fetch();
 
@@ -19,8 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $uid = $_SESSION['user_id'];
     $pid = (int)$_POST['product_id'];
     $qty = (int)$_POST['quantity'];
+    
     $stmt = $pdo->prepare('INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?');
     $stmt->execute([$uid, $pid, $qty, $qty]);
+    
     header('Location: cart.php');
     exit();
 }
@@ -88,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 <body>
 
 <header>
-    <a href="index.php" class="logo"><img src="images/logo.png" alt="EliteShop" style="height: 40px; vertical-align: middle;"></a>
+    <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 85px; width: 125px; vertical-align: middle;"></a>
     <nav>
         <a href="index.php">الرئيسية</a>
         <a href="products.php">المنتجات</a>
@@ -110,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     <div class="product-info">
         <h1><?= htmlspecialchars($product['name']) ?></h1>
         <div class="price"><?= htmlspecialchars($product['price']) ?> شيكل</div>
-        <p>النوع: <?= htmlspecialchars($product['device_type']) ?></p>
+        <p>النوع: <?= htmlspecialchars($product['category_name']) ?></p>
         <p class="desc"><?= htmlspecialchars($product['description']) ?></p>
         <div class="stock">الكمية المتاحة في المخزن: <?= $product['stock_quantity'] ?></div>
         

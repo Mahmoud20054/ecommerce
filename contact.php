@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <header>
-    <a href="index.php" class="logo">NTPO 🛍️   🛍️      RDE </a>
+     <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 85px; width: 125px; vertical-align: middle;"></a>
     <nav>
         <a href="index.php">الرئيسية</a>
         <a href="products.php">المنتجات</a>

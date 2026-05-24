@@ -4,47 +4,30 @@ require_once 'config.php';
 $cat_id = isset($_GET['category']) ? (int)$_GET['category'] : 0;
 $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$type = isset($_GET['type']) ? $_GET['type'] : '';
-$categories = $pdo->query('SELECT * FROM categories')->fetchAll();
-if (!empty($type)) {
-    $query .= ' AND device_type = ?';
-    $params[] = $type;
-                    }  
-$query = 'SELECT * FROM products WHERE 1=1';
+
+
+$query = 'SELECT p.*, c.name AS category_name FROM products p LEFT JOIN categories c ON p.category_id = c.category_id WHERE 1=1';
 $params = [];
 
 if (!empty($search)) {
-    $query .= ' AND name LIKE ?';
+    $query .= ' AND p.name LIKE ?';
     $params[] = '%' . $search . '%';
 }
 
 if ($cat_id > 0) {
-    $query .= ' AND category_id = ?';
+    $query .= ' AND p.category_id = ?';
     $params[] = $cat_id;
 }
 
 if ($sort === 'low_high') {
-    $query .= ' ORDER BY price ASC';
+    $query .= ' ORDER BY p.price ASC';
 } elseif ($sort === 'high_low') {
-    $query .= ' ORDER BY price DESC';
+    $query .= ' ORDER BY p.price DESC';
 }
 
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $products = $stmt->fetchAll();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: login.php');
-        exit();
-    }
-    $uid = $_SESSION['user_id'];
-    $pid = (int)$_POST['product_id'];
-    $stmt = $pdo->prepare('INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1');
-    $stmt->execute([$uid, $pid]);
-    header('Location: cart.php');
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -110,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 <body>
 
 <header>
-   <a href="index.php" class="logo"><img src="images/logo.png" alt="EliteShop" style="height: 40px; vertical-align: middle;"></a>
+   <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 85px; width: 125px; vertical-align: middle;"></a>
     <nav>
         <a href="index.php">الرئيسية</a>
         <a href="products.php">المنتجات</a>
@@ -162,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                         <h3 class="card-title"><?= htmlspecialchars($product['name']) ?></h3>
                         <div class="price"><?= htmlspecialchars($product['price']) ?> شيكل</div>
                     </div>
-                    <p>النوع: <?= htmlspecialchars($product['device_type']) ?></p>
+                   <p>النوع: <?= htmlspecialchars($product['category_name']) ?></p>
                     <div class="actions">
                         <a href="product-detail.php?id=<?= $product['product_id'] ?>" class="btn-view">التفاصيل</a>
                         <form action="products.php" method="POST" style="flex: 1; display: flex;">

@@ -109,7 +109,7 @@ $recent_orders = $stmt->fetchAll();
 
 <div class="sidebar">
     <div class="sidebar-logo">
-        <h2>NTPO 🛍️   🛍️      RDE</h2>
+       <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 100px; width: 250px; vertical-align: middle;"></a>
         <p>لوحة تحكم الإدارة</p>
     </div>
     <a href="admin_dashboard.php" class="active">🏠 الرئيسية</a>

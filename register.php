@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="reg-container">
     <div class="logo-area">
-        <h1>NTPO       RDE</h1>
+           <a href="index.php" class="logo"><img src="uploads/logo.png" alt="NTPO 🛍️   🛍️      RDE" style="height: 85px; width: 125px; vertical-align: middle;"></a>
         <p>متجرك الإلكتروني الموثوق</p>
     </div>
     <h2>انضم إلينا اليوم</h2>
